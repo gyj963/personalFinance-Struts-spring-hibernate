@@ -1,0 +1,16 @@
+#tableDiv{
+	position:absolute;
+	width:86%;
+	left:7%;
+	top:18%;
+	height:70%;
+}
+#tableDiv table {
+	font-family: "Î¢ÈíÑÅºÚ";
+	color: black;
+}
+#buttons{
+	position:absolute;
+	right:7%;
+	top:11%;
+}

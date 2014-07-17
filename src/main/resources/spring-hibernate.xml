@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		 http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+    <!--spring整合hibernate-->
+
+    <!--spring配置事务，此处采用全注解-->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!--配置jdbc数据源 使用了config.properties文件-->
+    <context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true"/>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}"/>
+        <property name="numTestsPerEvictionRun" value="${jdbc.pool.numTestsPerEvictionRun}"/>
+        <property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}"/>
+        <property name="testWhileIdle" value="${jdbc.pool.testWhileIdle}"/>
+        <property name="testOnReturn" value="${jdbc.pool.testOnReturn}"/>
+        <property name="validationQuery" value="${jdbc.pool.validationQuery}"/>
+    </bean>
+
+
+    <!-- 配置hibernate session工厂 （hibernate数据源 比jdbc数据源较高级）-->
+    <bean id="sessionFactory"   class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <!--sessionFactory需要依赖jdbc数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+            </props>
+        </property>
+
+        <!-- 自动扫描注解方式配置的hibernate类文件 -->
+        <property name="mappingResources">
+            <list>
+                <value>/com/pf/model/entity/TUser.hbm.xml</value>
+                <value>/com/pf/model/entity/TBill.hbm.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 定义事务管理器（声明式的事务） -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+          <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <!--定义hibernateDaoSupport（spring对hibernate的支持类）-->
+    <bean id="hibernateDaoSupport" abstract="true"
+          class="org.springframework.orm.hibernate3.support.HibernateDaoSupport">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!--使spring能扫描得到dao下（controller层）的东东（依赖注入）-->
+    <context:component-scan base-package="com.pf.dao.**"/>
+</beans>

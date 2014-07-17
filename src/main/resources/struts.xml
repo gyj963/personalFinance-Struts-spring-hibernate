@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!--设置中文
+    <constant name="struts.i18n.encoding" value="GBK" /> -->
+
+    <!--struts可以通过spring仓库获取相应action类 及需要依赖的类-->
+    <constant name="struts.objectFactory" value="spring" />
+    <!-- 此段代码非常关键，它可以让你在修改代码后，不需要重新启动服务器 -->
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.action.extension" value="action"/>
+    <package name="User" extends="struts-default" namespace="/user" >
+        <action name="userAdd" class="com.pf.action.UserAddAction">
+        <result name="input">/jsp/register.jsp</result>
+        <result name="error">/jsp/register.jsp</result>
+        <result name="success">/jsp/welcome.jsp</result>
+    </action>
+        <action name="login" class="com.pf.action.UserLoginAction">
+            <result name="success">/jsp/welcome.jsp</result>
+            <result name="error">/jsp/login.jsp</result>
+        </action>
+    </package>
+    <package name="Bill" extends="struts-default" namespace="/bill" >
+        <action name="billList" class="com.pf.action.BillListAction">
+            <result name="success">/jsp/list.jsp</result>
+            <result name="error">/jsp/error.jsp</result>
+        </action>
+        <action name="billAdd" class="com.pf.action.BillAddAction">
+            <result name="success" type="redirect">billList.action</result>
+            <result name="error">/jsp/error.jsp</result>
+        </action>
+        <action name="billDel" class="com.pf.action.BillDeleteAction">
+            <result name="success" type="redirect">billList.action</result>
+            <result name="error">/jsp/error.jsp</result>
+        </action>
+        <action name="billUpdateShow" class="com.pf.action.BillUpdateShowAction">
+            <result name="success" >/jsp/change.jsp</result>
+            <result name="error">/jsp/error.jsp</result>
+        </action>
+        <action name="billUpdate" class="com.pf.action.BillUpdateAction">
+            <result name="success" type="redirect">billList.action</result>
+            <result name="error">/jsp/error.jsp</result>
+        </action>
+        <action name="billFilter" class="com.pf.action.BillFilterAction">
+            <result name="success" >/jsp/list.jsp</result>
+            <result name="error">/jsp/error.jsp</result>
+        </action>
+        <action name="billStatisByStyle" class="com.pf.action.BillStatisByStyleAction">
+        </action>
+        <action name="billStatisByCreatedTime" class="com.pf.action.BillStatisByCreatedTimeAction">
+        </action>
+        <action name="billStatisByMemo" class="com.pf.action.BillStatisByMemoAction">
+        </action>
+    </package>
+</struts>

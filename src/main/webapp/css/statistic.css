@@ -1,0 +1,10 @@
+#data{
+	left:8%;
+}
+.copyright{
+    position:absolute;
+    font-size:12px;
+    width:30%;
+    left:40%;
+    bottom:5%;
+}

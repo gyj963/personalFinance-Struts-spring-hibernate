@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <!--使spring能扫描得到action下（controller层）的东东（依赖注入）-->
+    <context:component-scan base-package="com.pf.action.**" />
+    <!--使spring能扫描得到service下（controller层）的东东（依赖注入）-->
+    <context:component-scan base-package="com.pf.service.**" />
+
+
+    <!--spring的两个配置文件将所有类扫描到自己的仓库里并初始化并且每个类在其仓库里只有一份。
+    类需要用到别的类就向spring的仓库获取（Autowired）-->
+</beans>
